@@ -39,21 +39,29 @@ void merge(int index){
 	tree[index].max=max(tree[l].right+tree[r].left,max(tree[l].sum+tree[r].left,max(tree[l].sum+tree[r].sum,max(tree[l].right+tree[r].sum,max(tree[l].max,tree[r].max)))));
 	tree[index].left=max(tree[l].sum+tree[r].left,max(tree[l].sum,tree[l].left));
 	tree[index].right=max(tree[l].right+tree[r].sum,max(tree[r].sum,tree[r].right));
+	//this part could be optimized :P
 }
 int sizeoftree(int N) {
+//size is twice the power of 2 just greater than or equal to N.
   int size = 1;
   for (; size < N; size <<= 1);
   return size << 1;
 }
 void maketree(int index,int left,int right){
+	//index->current index of the tree.
+	//left and right-> represents the indices of the range that node of tree contains.
 	if(left==right){
 		tree[index].left=tree[index].right=tree[index].sum=tree[index].max=a[left];
+		//ending criteria
 	}
 	else{
 		int mid=(left+right)/2;
 		maketree(index*2+1,left,mid);
+		//left child recursion
 		maketree(index*2+2,mid+1,right);
+		//right child recursion
 		merge(index);
+		//merging left child and right child
 	}
 }	
 int main(){
@@ -64,6 +72,7 @@ int main(){
 	int size=sizeoftree(n);
 	//cout<<size<<endl;
 	maketree(0,0,n-1);
+	//calling maketree function creates a segment tree in the array of structures 'tree'.
 	int q;
 	scanf("%d",&q);
 	while(q--){
